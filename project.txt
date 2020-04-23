@@ -1,0 +1,49 @@
+echo "This is the script that provides tools for the network monitering."
+echo "HOSTNAME: "$HOSTNAME
+internalIP=$(hostname -I)
+echo "Internal IP: "$internalIP
+
+echo "Checking for required packages"
+if(dpkg -s iftop >/dev/null 2>&1);
+then
+echo "iftop installed"
+else
+sudo apt install iftop
+fi
+
+if(dpkg -s traceroute >/dev/null 2>&1);
+then
+echo "traceroute installed"
+else
+echo "Installing traceroute..."
+sudo apt install traceroute
+fi
+input=0
+while [ $input -lt 4 ]
+do
+echo "We use IFTOP To moniter Network bandwidth/Traffic. Press 1 to listen to localhost: "
+echo "We use TRACEROUTE to detects the delay & find pathway to target. Press 2 to run this commanad: "
+echo "We use ROUTE to see kernel IP routing table. Press 3 to run this commanad: "
+echo " Press 4 to exit program "
+read input
+if [ $input -eq 1 ];
+then
+echo "Starting iftop..."
+sudo iftop -i lo
+elif [ $input -eq 2 ];
+then
+echo "starting traceroute..."
+sudo traceroute instagram.com
+elif [ $input -eq 3 ];
+then
+echo "starting route..."
+sudo route
+else
+if [ $input -eq 4 ];
+then
+echo "Exiting Program..."
+else
+echo "Invalid Input"
+fi
+fi
+done
